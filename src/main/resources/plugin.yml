@@ -1,0 +1,13 @@
+name: MoneyCraft
+version: ${project.version}
+main: net.kunmc.propromp.moneycraft.MoneyCraft
+api-version: 1.15
+authors: [ Propromp ]
+depend: [ Vault ]
+description: お金のやつ
+
+commands:
+  moneycraft:
+    aliases: [mcr]
+    usage: notion見ろ
+    description: notion見ろ
