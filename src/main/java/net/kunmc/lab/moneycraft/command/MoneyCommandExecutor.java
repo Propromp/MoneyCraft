@@ -1,4 +1,4 @@
-package net.kunmc.propromp.moneycraft.command;
+package net.kunmc.lab.moneycraft.command;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;

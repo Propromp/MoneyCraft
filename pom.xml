@@ -111,5 +111,12 @@
             <version>RELEASE</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>net.minecraft</groupId>
+            <artifactId>server</artifactId>
+            <version>1.15</version>
+            <systemPath>${basedir}/lib/server.jar</systemPath>
+            <scope>system</scope>
+        </dependency>
     </dependencies>
 </project>

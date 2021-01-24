@@ -1,6 +1,6 @@
 name: MoneyCraft
 version: ${project.version}
-main: net.kunmc.propromp.moneycraft.MoneyCraft
+main: net.kunmc.lab.moneycraft.MoneyCraft
 api-version: 1.15
 authors: [ Propromp ]
 depend: [ Vault ]
