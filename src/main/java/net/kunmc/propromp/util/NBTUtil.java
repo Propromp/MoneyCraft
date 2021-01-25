@@ -18,10 +18,9 @@ public class NBTUtil {
      * @param value value of the nbt tag
      */
     public static void setString(org.bukkit.inventory.ItemStack item, String key, String value){
-        ItemStack nmsStack = CraftItemStack.asNMSCopy(item);
+        ItemStack nmsStack = ((CraftItemStack)item).getHandle();
         NBTTagCompound tag = nmsStack.getOrCreateTag();
         tag.set(key, NBTTagString.a(value));
-        item = CraftItemStack.asBukkitCopy(nmsStack);
     }
     /**
      * set NBT Tag by Byte
@@ -30,10 +29,9 @@ public class NBTUtil {
      * @param value value of the nbt tag
      */
     public static void setByte(org.bukkit.inventory.ItemStack item, String key, Byte value){
-        ItemStack nmsStack = CraftItemStack.asNMSCopy(item);
+        ItemStack nmsStack = ((CraftItemStack)item).getHandle();
         NBTTagCompound tag = nmsStack.getOrCreateTag();
         tag.set(key, NBTTagByte.a(value));
-        item = CraftItemStack.asBukkitCopy(nmsStack);
     }
     /**
      * set NBT Tag by Byte Array
@@ -42,10 +40,9 @@ public class NBTUtil {
      * @param value value of the nbt tag
      */
     public static void setByteArray(org.bukkit.inventory.ItemStack item, String key, List<Byte> value){
-        ItemStack nmsStack = CraftItemStack.asNMSCopy(item);
+        ItemStack nmsStack = ((CraftItemStack)item).getHandle();
         NBTTagCompound tag = nmsStack.getOrCreateTag();
         tag.set(key, new NBTTagByteArray(value));
-        item = CraftItemStack.asBukkitCopy(nmsStack);
     }
     /**
      * set NBT Tag by Double
@@ -54,10 +51,9 @@ public class NBTUtil {
      * @param value value of the nbt tag
      */
     public static void setDouble(org.bukkit.inventory.ItemStack item, String key, double value){
-        ItemStack nmsStack = CraftItemStack.asNMSCopy(item);
+        ItemStack nmsStack = ((CraftItemStack)item).getHandle();
         NBTTagCompound tag = nmsStack.getOrCreateTag();
         tag.set(key, NBTTagDouble.a(value));
-        item = CraftItemStack.asBukkitCopy(nmsStack);
     }
     /**
      * set NBT Tag by Float
@@ -66,10 +62,9 @@ public class NBTUtil {
      * @param value value of the nbt tag
      */
     public static void setFloat(org.bukkit.inventory.ItemStack item, String key, float value){
-        ItemStack nmsStack = CraftItemStack.asNMSCopy(item);
+        ItemStack nmsStack = ((CraftItemStack)item).getHandle();
         NBTTagCompound tag = nmsStack.getOrCreateTag();
         tag.set(key, NBTTagFloat.a(value));
-        item = CraftItemStack.asBukkitCopy(nmsStack);
     }
     /**
      * set NBT Tag by integer
@@ -78,10 +73,9 @@ public class NBTUtil {
      * @param value value of the nbt tag
      */
     public static void setInt(org.bukkit.inventory.ItemStack item, String key, int value){
-        ItemStack nmsStack = CraftItemStack.asNMSCopy(item);
+        ItemStack nmsStack = ((CraftItemStack)item).getHandle();
         NBTTagCompound tag = nmsStack.getOrCreateTag();
         tag.set(key, NBTTagInt.a(value));
-        item = CraftItemStack.asBukkitCopy(nmsStack);
     }
     /**
      * set NBT Tag by long
@@ -90,10 +84,9 @@ public class NBTUtil {
      * @param value value of the nbt tag
      */
     public static void setLong(org.bukkit.inventory.ItemStack item, String key, long value){
-        ItemStack nmsStack = CraftItemStack.asNMSCopy(item);
+        ItemStack nmsStack = ((CraftItemStack)item).getHandle();
         NBTTagCompound tag = nmsStack.getOrCreateTag();
         tag.set(key, NBTTagLong.a(value));
-        item = CraftItemStack.asBukkitCopy(nmsStack);
     }
     /**
      * set NBT Tag by integer array
@@ -102,10 +95,9 @@ public class NBTUtil {
      * @param value value of the nbt tag
      */
     public static void setIntArray(org.bukkit.inventory.ItemStack item, String key, int[] value){
-        ItemStack nmsStack = CraftItemStack.asNMSCopy(item);
+        ItemStack nmsStack = ((CraftItemStack)item).getHandle();
         NBTTagCompound tag = nmsStack.getOrCreateTag();
         tag.set(key, new NBTTagIntArray(value));
-        item = CraftItemStack.asBukkitCopy(nmsStack);
     }
     /**
      * set NBT Tag by long array
@@ -114,10 +106,9 @@ public class NBTUtil {
      * @param value value of the nbt tag
      */
     public static void setLongArray(org.bukkit.inventory.ItemStack item, String key, long[] value){
-        ItemStack nmsStack = CraftItemStack.asNMSCopy(item);
+        ItemStack nmsStack = ((CraftItemStack)item).getHandle();
         NBTTagCompound tag = nmsStack.getOrCreateTag();
         tag.set(key, new NBTTagLongArray(value));
-        item = CraftItemStack.asBukkitCopy(nmsStack);
     }
     /**
      * set NBT Tag by short
@@ -126,10 +117,9 @@ public class NBTUtil {
      * @param value value of the nbt tag
      */
     public static void setShort(org.bukkit.inventory.ItemStack item, String key, short value){
-        ItemStack nmsStack = CraftItemStack.asNMSCopy(item);
+        ItemStack nmsStack = ((CraftItemStack)item).getHandle();
         NBTTagCompound tag = nmsStack.getOrCreateTag();
         tag.set(key, NBTTagShort.a(value));
-        item = CraftItemStack.asBukkitCopy(nmsStack);
     }
 
 
@@ -139,7 +129,7 @@ public class NBTUtil {
      * @param key key of the nbt tag
      */
     public static NBTBase get(org.bukkit.inventory.ItemStack item,String key){
-        ItemStack nmsStack = CraftItemStack.asNMSCopy(item);
+        ItemStack nmsStack = ((CraftItemStack)item).getHandle();
         NBTTagCompound tag = nmsStack.getOrCreateTag();
         return tag.get(key);
     }
@@ -149,7 +139,7 @@ public class NBTUtil {
      * @param key key of the nbt tag
      */
     public static String getString(org.bukkit.inventory.ItemStack item,String key){
-        ItemStack nmsStack = CraftItemStack.asNMSCopy(item);
+        ItemStack nmsStack = ((CraftItemStack)item).getHandle();
         NBTTagCompound tag = nmsStack.getOrCreateTag();
         return tag.getString(key);
     }

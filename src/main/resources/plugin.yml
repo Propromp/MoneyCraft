@@ -11,3 +11,10 @@ commands:
     aliases: [mcr]
     usage: notion見ろ
     description: notion見ろ
+
+permissions:
+  moneycraft.*:
+    children: [moneycraft.kein]
+    default: op
+  moneycraft.kein:
+    default: false

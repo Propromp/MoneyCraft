@@ -2,7 +2,8 @@ package net.kunmc.lab.moneycraft;
 
 import net.kunmc.lab.moneycraft.command.MoneyCommandExecutor;
 import net.kunmc.lab.moneycraft.effect.KeinEffect;
-import net.kunmc.lab.moneycraft.event.ClickEvent;
+import net.kunmc.lab.moneycraft.event.PlayerEvent;
+import net.kunmc.propromp.util.NBTUtil;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.*;
 import org.bukkit.inventory.ItemStack;
@@ -11,9 +12,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import javax.naming.Name;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public final class MoneyCraft extends JavaPlugin {
 
@@ -22,19 +23,22 @@ public final class MoneyCraft extends JavaPlugin {
     @Override
     public void onEnable() {
         getLogger().info("Hi!");
-        getLogger().info(ChatColor.AQUA+"MONEYCRAFT BY PROPROMP");
+        getLogger().info(ChatColor.AQUA + "MONEYCRAFT BY PROPROMP");
         getLogger().info("Copytight 2021 TeamKun., Propromp");
 
-        if (!setupEconomy() ) {
+        if (!setupEconomy()) {
             getLogger().severe(String.format("[%s] - Vaultが見つからないんだが.", getDescription().getName()));
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
 
-        getCommand("moneycraft").setExecutor(new MoneyCommandExecutor());
+        Objects.requireNonNull(getCommand("moneycraft")).setExecutor(new MoneyCommandExecutor());
+
+        //コンフィグ
+        saveDefaultConfig();
 
         //イベント登録
-        Bukkit.getPluginManager().registerEvents(new ClickEvent(),this);
+        Bukkit.getPluginManager().registerEvents(new PlayerEvent(), this);
 
         //財布アイテム登録
         ItemStack itemStack = new ItemStack(Material.WHEAT_SEEDS);
@@ -46,18 +50,19 @@ public final class MoneyCraft extends JavaPlugin {
         lore.add("右クリックで残高表示");
         lore.add("Shift+右クリックでランキング表示");
         meta.setLore(lore);
-        meta.setCustomModelData(114514);
+        meta.setCustomModelData(1);
         itemStack.setItemMeta(meta);
         //財布レシピ登録
-        NamespacedKey key = new NamespacedKey(this,"wallet");
-        ShapedRecipe recipe = new ShapedRecipe(key,itemStack);
+        NamespacedKey key = new NamespacedKey(this, "wallet");
+        ShapedRecipe recipe = new ShapedRecipe(key, itemStack);
         recipe.shape("LGL");
-        recipe.setIngredient('L',Material.LEATHER);
-        recipe.setIngredient('G',Material.GOLD_INGOT);
+        recipe.setIngredient('L', Material.LEATHER);
+        recipe.setIngredient('G', Material.GOLD_INGOT);
         Bukkit.addRecipe(recipe);
 
         //keinエフェクト
-//        new KeinEffect().runTaskTimer(this,0,1);
+        new KeinEffect().runTaskTimer(this,0,1);
+        KeinEffect.use = getConfig().getBoolean("part.kein");
     }
 
     @Override
@@ -65,7 +70,7 @@ public final class MoneyCraft extends JavaPlugin {
         getLogger().info("Bay!");
     }
 
-    public static Economy getEconomy(){
+    public static Economy getEconomy() {
         return economy;
     }
 
@@ -78,11 +83,11 @@ public final class MoneyCraft extends JavaPlugin {
             return false;
         }
         economy = rsp.getProvider();
-        return economy != null;
+        return true;
     }
 
-    public static int getId(OfflinePlayer player){
-        switch (player.getUniqueId().toString()){
+    public static int getId(OfflinePlayer player) {
+        switch (player.getUniqueId().toString()) {
             default:
                 return 1;
             case "a3abe1f9-cd08-46b1-9b39-919a3e6150f0"://fakevox

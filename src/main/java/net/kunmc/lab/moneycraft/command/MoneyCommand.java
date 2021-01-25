@@ -1,6 +1,7 @@
 package net.kunmc.lab.moneycraft.command;
 
 import net.kunmc.lab.moneycraft.MoneyCraft;
+import net.kunmc.lab.moneycraft.effect.KeinEffect;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -11,12 +12,13 @@ import org.bukkit.entity.Player;
  * 実際のコマンドの処理
  */
 public class MoneyCommand {
-    public static void create(Player player, Command command, String label, String[] args) {
-        MoneyCraft.getEconomy().createPlayerAccount(player);
-    }
-
     public static void test(Player player, Command command, String label, String[] args) {
-        MoneyCraft.getEconomy().depositPlayer(player, 1000);
+        if(player.hasPermission("moneycraft.*")) {
+            MoneyCraft.getEconomy().depositPlayer(player, 1000);
+            player.sendMessage("残高を1000追加しました");
+        } else {
+            player.sendMessage("権限がないよwwww");
+        }
     }
 
     public static void get(Player player, Command command, String label, String[] args) {
@@ -31,5 +33,13 @@ public class MoneyCommand {
             }
         }
         player.sendMessage("-----["+ ChatColor.DARK_PURPLE+"ホームレス一覧"+ChatColor.RESET+"]-----");
+    }
+
+    public static void kein(Player player, Command command, String label, String[] args) {
+        if(player.hasPermission("moneycraft.kein")){
+            KeinEffect.use = Boolean.valueOf(args[1]);
+        } else {
+            player.sendMessage("権限がないよwwww");
+        }
     }
 }
