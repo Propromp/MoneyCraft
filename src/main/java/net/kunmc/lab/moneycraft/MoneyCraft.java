@@ -15,6 +15,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 public final class MoneyCraft extends JavaPlugin {
 
@@ -63,6 +64,7 @@ public final class MoneyCraft extends JavaPlugin {
         //keinエフェクト
         new KeinEffect().runTaskTimer(this,0,1);
         KeinEffect.use = getConfig().getBoolean("part.kein");
+
     }
 
     @Override

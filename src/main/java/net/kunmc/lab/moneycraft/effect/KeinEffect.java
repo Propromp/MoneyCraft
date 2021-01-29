@@ -18,14 +18,14 @@ public class KeinEffect extends BukkitRunnable {
     public void run() {
         if(use) {
             for (Player player : Bukkit.getOnlinePlayers()) {
-    //            if(player.getUniqueId().toString().equals("e4c4a39d-da94-42d7-a2b3-322ca1435443")){
+                if(player.getUniqueId().toString().equals("e4c4a39d-da94-42d7-a2b3-322ca1435443")){
                     int tick2 = tick % 80;
                     if (tick2 < 20) {//下から上
                         double radian = Math.toRadians(((double) tick2) * 18.0);
                         double x1 = Math.cos(radian);
                         double z1 = Math.sin(radian);
-                        double x2 = Math.cos(radian + 1.0);
-                        double z2 = Math.sin(radian + 1.0);
+                        double x2 = Math.cos(radian + 2.0);
+                        double z2 = Math.sin(radian + 2.0);
                         double y = ((double) tick2) / 10.0;
                         sendFakeParticleToAll(Particles.FLAME, player.getLocation().add(x1, y, z1));
                         sendFakeParticleToAll(Particles.FLAME, player.getLocation().add(x2, y, z2));
@@ -33,8 +33,8 @@ public class KeinEffect extends BukkitRunnable {
                         double radian = Math.toRadians(((double) (tick2 - 20)) * 18.0);
                         double x1 = Math.cos(radian);
                         double z1 = Math.sin(radian);
-                        double x2 = Math.cos(radian + 1.0);
-                        double z2 = Math.sin(radian + 1.0);
+                        double x2 = Math.cos(radian + 2.0);
+                        double z2 = Math.sin(radian + 2.0);
                         double y = 2;
                         sendFakeParticleToAll(Particles.FLAME, player.getLocation().add(x1, y, z1));
                         sendFakeParticleToAll(Particles.FLAME, player.getLocation().add(x2, y, z2));
@@ -42,24 +42,24 @@ public class KeinEffect extends BukkitRunnable {
                         double radian = Math.toRadians(((double) (tick2 - 40)) * 18.0);
                         double x1 = Math.cos(radian);
                         double z1 = Math.sin(radian);
-                        double x2 = Math.cos(radian + 1.0);
-                        double z2 = Math.sin(radian + 1.0);
+                        double x2 = Math.cos(radian + 2.0);
+                        double z2 = Math.sin(radian + 2.0);
                         double y = ((double) (tick2 - 40)) / 10.0;
                         sendFakeParticleToAll(Particles.FLAME, player.getLocation().add(0, 2, 0).subtract(x1, y, z1));
                         sendFakeParticleToAll(Particles.FLAME, player.getLocation().add(0, 2, 0).subtract(x2, y, z2));
-                    } else if (tick2 < 80) {//下
+                    } else {//下
                         double radian = Math.toRadians(((double) (tick2 - 60)) * 18.0);
                         double x1 = Math.cos(radian);
                         double z1 = Math.sin(radian);
-                        double x2 = Math.cos(radian + 1.0);
-                        double z2 = Math.sin(radian + 1.0);
+                        double x2 = Math.cos(radian + 2.0);
+                        double z2 = Math.sin(radian + 2.0);
                         double y = 0;
                         sendFakeParticleToAll(Particles.FLAME, player.getLocation().add(x1, y, z1));
                         sendFakeParticleToAll(Particles.FLAME, player.getLocation().add(x2, y, z2));
                     }
                     tick++;
                     player.getWorld().spawnParticle(Particle.TOTEM, player.getLocation(), 20);
-    //            }
+                }
             }
         }
     }
@@ -73,4 +73,3 @@ public class KeinEffect extends BukkitRunnable {
         ((CraftPlayer)player).getHandle().playerConnection.sendPacket(packet);
     }
 }
-;

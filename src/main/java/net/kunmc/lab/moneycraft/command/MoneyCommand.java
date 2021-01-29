@@ -14,8 +14,8 @@ import org.bukkit.entity.Player;
 public class MoneyCommand {
     public static void test(Player player, Command command, String label, String[] args) {
         if(player.hasPermission("moneycraft.*")) {
-            MoneyCraft.getEconomy().depositPlayer(player, 1000);
-            player.sendMessage("残高を1000追加しました");
+            MoneyCraft.getEconomy().depositPlayer(player, Integer.parseInt(args[1]));
+            player.sendMessage("残高を"+args[1]+"追加しました");
         } else {
             player.sendMessage("権限がないよwwww");
         }
@@ -38,6 +38,7 @@ public class MoneyCommand {
     public static void kein(Player player, Command command, String label, String[] args) {
         if(player.hasPermission("moneycraft.kein")){
             KeinEffect.use = Boolean.valueOf(args[1]);
+
         } else {
             player.sendMessage("権限がないよwwww");
         }
