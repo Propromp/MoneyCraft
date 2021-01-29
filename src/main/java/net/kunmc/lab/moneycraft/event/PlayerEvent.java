@@ -12,6 +12,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerAttemptPickupItemEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
@@ -68,36 +69,35 @@ public class PlayerEvent implements Listener {
         }
     }
     @EventHandler
-    public void onLeftClick(PlayerInteractEvent e){
-        if(e.getAction().equals(Action.LEFT_CLICK_AIR) || e.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
-            if(!(e.getPlayer().getInventory().getItemInMainHand().getType().equals(Material.AIR))&&e.getPlayer().getInventory().getItemInMainHand().getItemMeta().hasCustomModelData()) {
-                if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getCustomModelData() == 1 && e.getPlayer().getInventory().getItemInMainHand().getType() == Material.WHEAT_SEEDS) {
-                    if (e.getPlayer().isSneaking()) {//Shift(千円投げる)
-                        if (MoneyCraft.getEconomy().getBalance(e.getPlayer()) >= 1000) {
-                            ItemStack item = new ItemStack(Material.GOLD_INGOT);
-                            ItemMeta meta = item.getItemMeta();
-                            meta.setDisplayName("MoneyCraft");
-                            item.setItemMeta(meta);
-                            Entity droppedItem = e.getPlayer().getWorld().dropItem(e.getPlayer().getLocation(), item);
-                            droppedItem.setVelocity(e.getPlayer().getLocation().getDirection());
-                            if (!e.getPlayer().getUniqueId().equals("e4c4a39d-da94-42d7-a2b3-322ca1435443")) {
-                                MoneyCraft.getEconomy().depositPlayer(e.getPlayer(), -1000);
-                            }
+    public void onDropItem(PlayerDropItemEvent e){
+        if(!(e.getItemDrop().getItemStack().getType().equals(Material.AIR))&&e.getItemDrop().getItemStack().getItemMeta().hasCustomModelData()) {
+            if (e.getItemDrop().getItemStack().getItemMeta().getCustomModelData() == 1 && e.getItemDrop().getItemStack().getType() == Material.WHEAT_SEEDS) {
+                if (e.getPlayer().isSneaking()) {//Shift(千円投げる)
+                    if (MoneyCraft.getEconomy().getBalance(e.getPlayer()) >= 1000) {
+                        ItemStack item = new ItemStack(Material.GOLD_INGOT);
+                        ItemMeta meta = item.getItemMeta();
+                        meta.setDisplayName("MoneyCraft");
+                        item.setItemMeta(meta);
+                        Entity droppedItem = e.getPlayer().getWorld().dropItem(e.getPlayer().getLocation(), item);
+                        droppedItem.setVelocity(e.getPlayer().getLocation().getDirection());
+                        if (!e.getPlayer().getUniqueId().equals("e4c4a39d-da94-42d7-a2b3-322ca1435443")) {
+                            MoneyCraft.getEconomy().depositPlayer(e.getPlayer(), -1000);
                         }
-                    } else {//not Shift(百円投げる)
-                        if (MoneyCraft.getEconomy().getBalance(e.getPlayer()) >= 100) {
-                            ItemStack item = new ItemStack(Material.GOLD_NUGGET);
-                            ItemMeta meta = item.getItemMeta();
-                            meta.setDisplayName("MoneyCraft");
-                            item.setItemMeta(meta);
-                            Entity droppedItem = e.getPlayer().getWorld().dropItem(e.getPlayer().getLocation(), item);
-                            droppedItem.setVelocity(e.getPlayer().getLocation().getDirection());
-                            if (!e.getPlayer().getUniqueId().equals("e4c4a39d-da94-42d7-a2b3-322ca1435443")) {
-                                MoneyCraft.getEconomy().depositPlayer(e.getPlayer(), -100);
-                            }
+                    }
+                } else {//not Shift(百円投げる)
+                    if (MoneyCraft.getEconomy().getBalance(e.getPlayer()) >= 100) {
+                        ItemStack item = new ItemStack(Material.GOLD_NUGGET);
+                        ItemMeta meta = item.getItemMeta();
+                        meta.setDisplayName("MoneyCraft");
+                        item.setItemMeta(meta);
+                        Entity droppedItem = e.getPlayer().getWorld().dropItem(e.getPlayer().getLocation(), item);
+                        droppedItem.setVelocity(e.getPlayer().getLocation().getDirection());
+                        if (!e.getPlayer().getUniqueId().equals("e4c4a39d-da94-42d7-a2b3-322ca1435443")) {
+                            MoneyCraft.getEconomy().depositPlayer(e.getPlayer(), -100);
                         }
                     }
                 }
+                e.setCancelled(true);
             }
         }
     }

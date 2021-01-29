@@ -46,8 +46,8 @@ public final class MoneyCraft extends JavaPlugin {
         ItemMeta meta = itemStack.getItemMeta();
         meta.setDisplayName("財布");
         List<String> lore = new ArrayList<>();
-        lore.add("左クリックで百円投げる");
-        lore.add("Shift+左クリックで千円投げる");
+        lore.add("Qで百円投げる");
+        lore.add("Shift+Qで千円投げる");
         lore.add("右クリックで残高表示");
         lore.add("Shift+右クリックでランキング表示");
         meta.setLore(lore);
