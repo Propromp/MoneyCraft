@@ -37,7 +37,7 @@ public class MoneyCommand {
 
     public static void kein(Player player, Command command, String label, String[] args) {
         if(player.hasPermission("moneycraft.kein")){
-            KeinEffect.use = Boolean.valueOf(args[1]);
+            KeinEffect.use = Integer.valueOf(args[1]);
 
         } else {
             player.sendMessage("権限がないよwwww");
