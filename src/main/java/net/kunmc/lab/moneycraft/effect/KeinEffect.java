@@ -17,7 +17,7 @@ public class KeinEffect extends BukkitRunnable {
     @Override
     public void run() {
         for (Player player : Bukkit.getOnlinePlayers()) {
-//                if(player.getUniqueId().toString().equals("e4c4a39d-da94-42d7-a2b3-322ca1435443")){
+                if(player.getUniqueId().toString().equals("e4c4a39d-da94-42d7-a2b3-322ca1435443")){
                 int tick2 = tick % 80;
                 if (tick2 < 20) {//下から上
                     double radian = Math.toRadians(((double) tick2) * 18.0);
@@ -58,7 +58,7 @@ public class KeinEffect extends BukkitRunnable {
                 }
                 tick++;
                 player.getWorld().spawnParticle(Particle.TOTEM, player.getLocation(), 20);
-//                }
+                }
         }
     }
     private static void sendFakeParticleToAll(ParticleType type,Location loc){

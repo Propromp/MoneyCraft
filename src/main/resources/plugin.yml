@@ -3,7 +3,7 @@ version: ${project.version}
 main: net.kunmc.lab.moneycraft.MoneyCraft
 api-version: 1.15
 authors: [ Propromp ]
-depend: [ Vault ]
+depend: [ Vault,ActionbarAPI ]
 description: お金のやつ
 
 commands:

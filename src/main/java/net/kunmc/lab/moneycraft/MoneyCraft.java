@@ -1,16 +1,22 @@
 package net.kunmc.lab.moneycraft;
 
+import net.DeeChael.ActionbarAPI.AAPI;
 import net.kunmc.lab.moneycraft.command.MoneyCommandExecutor;
 import net.kunmc.lab.moneycraft.effect.KeinEffect;
 import net.kunmc.lab.moneycraft.event.PlayerEvent;
 import net.kunmc.propromp.util.NBTUtil;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.*;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,8 +27,12 @@ public final class MoneyCraft extends JavaPlugin {
 
     private static Economy economy;
 
+    public static MoneyCraft instance;
+
     @Override
     public void onEnable() {
+        instance=this;
+
         getLogger().info("Hi!");
         getLogger().info(ChatColor.AQUA + "MONEYCRAFT BY PROPROMP");
         getLogger().info("Copytight 2021 TeamKun., Propromp");
@@ -63,7 +73,17 @@ public final class MoneyCraft extends JavaPlugin {
 
         //keinエフェクト
         new KeinEffect().runTaskTimer(this,0,1);
-        KeinEffect.use = getConfig().getBoolean("part.kein");
+        KeinEffect.use = getConfig().getInt("part.kein");
+
+        //アクションバー
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                for(Player p:Bukkit.getOnlinePlayers()){
+                    AAPI.sendActionbar(p,"所持金:"+((int)getEconomy().getBalance(p))+"円");
+                }
+            }
+        }.runTaskTimer(this,0,5);
 
     }
 

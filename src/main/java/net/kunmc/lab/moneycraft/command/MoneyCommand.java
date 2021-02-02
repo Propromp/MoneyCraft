@@ -43,4 +43,9 @@ public class MoneyCommand {
             player.sendMessage("権限がないよwwww");
         }
     }
+
+    public static void reset(Player player, Command command, String label, String[] args){
+        MoneyCraft.getEconomy().depositPlayer(player,-MoneyCraft.getEconomy().getBalance(player));
+        player.sendMessage("所持金をリセットしました。");
+    }
 }

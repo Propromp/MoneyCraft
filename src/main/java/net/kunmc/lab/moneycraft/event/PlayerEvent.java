@@ -17,6 +17,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.*;
@@ -59,11 +60,11 @@ public class PlayerEvent implements Listener {
                     e.getPlayer().sendMessage("-----[" + ChatColor.GOLD + "長者番付" + ChatColor.RESET + "]-----");
 
                 } else {//not shift
-//                    if(e.getPlayer().getUniqueId().toString().equals("e4c4a39d-da94-42d7-a2b3-322ca1435443")){//kein
+                    if(e.getPlayer().getUniqueId().toString().equals("e4c4a39d-da94-42d7-a2b3-322ca1435443")){//kein
                         e.getPlayer().sendMessage("残高："+ChatColor.MAGIC+ "114514" +ChatColor.RESET+"円");
-//                    } else {
+                    } else {
                         e.getPlayer().sendMessage("残高：" + MoneyCraft.getEconomy().getBalance(e.getPlayer()) + "円");
-//                    }
+                    }
                 }
             }
         }
@@ -78,11 +79,11 @@ public class PlayerEvent implements Listener {
                         ItemMeta meta = item.getItemMeta();
                         meta.setDisplayName("MoneyCraft");
                         item.setItemMeta(meta);
-                        Entity droppedItem = e.getPlayer().getWorld().dropItem(e.getPlayer().getLocation(), item);
-                        droppedItem.setVelocity(e.getPlayer().getLocation().getDirection());
-//                        if (!e.getPlayer().getUniqueId().equals("e4c4a39d-da94-42d7-a2b3-322ca1435443")) {
+                        Entity droppedItem = e.getPlayer().getWorld().dropItem(e.getPlayer().getLocation().add(0,1,0), item);
+                        droppedItem.setVelocity(e.getPlayer().getLocation().getDirection().multiply(0.5));
+                        if (!e.getPlayer().getUniqueId().equals("e4c4a39d-da94-42d7-a2b3-322ca1435443")) {
                             MoneyCraft.getEconomy().depositPlayer(e.getPlayer(), -1000);
-//                        }
+                        }
                     }
                 } else {//not Shift(百円投げる)
                     if (MoneyCraft.getEconomy().getBalance(e.getPlayer()) >= 100) {
@@ -90,11 +91,11 @@ public class PlayerEvent implements Listener {
                         ItemMeta meta = item.getItemMeta();
                         meta.setDisplayName("MoneyCraft");
                         item.setItemMeta(meta);
-                        Entity droppedItem = e.getPlayer().getWorld().dropItem(e.getPlayer().getLocation(), item);
-                        droppedItem.setVelocity(e.getPlayer().getLocation().getDirection());
-//                        if (!e.getPlayer().getUniqueId().equals("e4c4a39d-da94-42d7-a2b3-322ca1435443")) {
+                        Entity droppedItem = e.getPlayer().getWorld().dropItem(e.getPlayer().getLocation().add(0,1,0), item);
+                        droppedItem.setVelocity(e.getPlayer().getLocation().getDirection().multiply(0.5));
+                        if (!e.getPlayer().getUniqueId().equals("e4c4a39d-da94-42d7-a2b3-322ca1435443")) {
                             MoneyCraft.getEconomy().depositPlayer(e.getPlayer(), -100);
-//                        }
+                        }
                     }
                 }
                 e.setCancelled(true);
@@ -105,9 +106,9 @@ public class PlayerEvent implements Listener {
     @EventHandler
     public void onDeath(PlayerDeathEvent e) {
         Bukkit.broadcastMessage(ChatColor.DARK_RED+e.getEntity().getName()+"は死んだことにより"+MoneyCraft.getEconomy().getBalance(e.getEntity())+"円失った");
-//        if(e.getEntity().getUniqueId().equals("e4c4a39d-da94-42d7-a2b3-322ca1435443")){
+        if(e.getEntity().getUniqueId().equals("e4c4a39d-da94-42d7-a2b3-322ca1435443")){
             Bukkit.broadcastMessage(ChatColor.GOLD+"だがしかし、keinは金に目がないので復活するまで財布にしがみついた");
-//        } else {
+        } else {
             int ingot_amount = ((int) (MoneyCraft.getEconomy().getBalance(e.getEntity()))) / 1000;
             int nugget_amount = ((int) (MoneyCraft.getEconomy().getBalance(e.getEntity())) - ingot_amount * 1000) / 100;
             MoneyCraft.getEconomy().depositPlayer(e.getEntity(), -MoneyCraft.getEconomy().getBalance(e.getEntity()));
@@ -127,7 +128,7 @@ public class PlayerEvent implements Listener {
                 item2.setItemMeta(meta2);
                 loc.getWorld().dropItem(loc, item2);
             }
-//        }
+        }
     }
 
     @EventHandler
@@ -144,8 +145,10 @@ public class PlayerEvent implements Listener {
                 MoneyCraft.getEconomy().depositPlayer(player, e.getItem().getItemStack().getAmount() * 100);
                 e.setCancelled(true);
             }
-
-            ((CraftItem)e.getItem()).getHandle().killEntity();
+            
+            e.getItem().setGravity(false);
+            e.getItem().teleport(e.getPlayer().getLocation().add(0,1,0).add(e.getPlayer().getLocation().getDirection().multiply(0.5)));
+            e.getItem().setPickupDelay(999);
             player.playSound(player.getLocation(),Sound.ENTITY_ITEM_PICKUP,1f,1f);
             player.playSound(player.getLocation(),Sound.ENTITY_EXPERIENCE_ORB_PICKUP,1f,0.8f);
             player.playSound(player.getLocation(),Sound.ENTITY_EXPERIENCE_ORB_PICKUP,1f,1f);
@@ -156,7 +159,7 @@ public class PlayerEvent implements Listener {
     public void onPunch(EntityDamageByEntityEvent e){
         if(e.getDamager() instanceof Player && e.getEntity() instanceof Player){
             Player player = (Player)e.getEntity();
-//            if(e.getDamager().getUniqueId().equals("e4c4a39d-da94-42d7-a2b3-322ca1435443")){
+            if(e.getDamager().getUniqueId().equals("e4c4a39d-da94-42d7-a2b3-322ca1435443")){
                 player.getWorld().playSound(player.getLocation(),Sound.ENTITY_PLAYER_ATTACK_CRIT,1,1);
                 player.playSound(player.getLocation(),Sound.ENTITY_ITEM_PICKUP,1,1);
             player.getWorld().spawnParticle(Particle.TOTEM,player.getLocation().add(0,1,0),100);
@@ -184,15 +187,15 @@ public class PlayerEvent implements Listener {
                     player.setVelocity(e.getDamager().getLocation().getDirection().multiply(5));
 
 
-//                }
+                }
             }
         }
     }
 
     @EventHandler
     public void onJoin(PlayerJoinEvent e){
-//        if(e.getPlayer().getUniqueId().equals(("e4c4a39d-da94-42d7-a2b3-322ca1435443"))){
+        if(e.getPlayer().getUniqueId().equals(("e4c4a39d-da94-42d7-a2b3-322ca1435443"))){
             MoneyCraft.getEconomy().depositPlayer(e.getPlayer(),114514114514d);
-//        }
+        }
     }
 }

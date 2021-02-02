@@ -118,5 +118,12 @@
             <systemPath>${basedir}/lib/server.jar</systemPath>
             <scope>system</scope>
         </dependency>
+        <dependency>
+            <groupId>unknown</groupId>
+            <artifactId>aapi</artifactId>
+            <version>unknown</version>
+            <systemPath>${basedir}/lib/ActionbarAPI.jar</systemPath>
+            <scope>system</scope>
+        </dependency>
     </dependencies>
 </project>
