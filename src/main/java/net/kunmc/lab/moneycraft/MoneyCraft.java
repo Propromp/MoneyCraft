@@ -6,7 +6,11 @@ import net.kunmc.lab.moneycraft.effect.KeinEffect;
 import net.kunmc.lab.moneycraft.event.PlayerEvent;
 import net.kunmc.propromp.util.NBTUtil;
 import net.milkbowl.vault.economy.Economy;
+import net.minecraft.server.v1_15_R1.PacketPlayOutNamedSoundEffect;
 import org.bukkit.*;
+import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
@@ -17,6 +21,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +33,7 @@ public final class MoneyCraft extends JavaPlugin {
     private static Economy economy;
 
     public static MoneyCraft instance;
+    public static ShapedRecipe recipe;
 
     @Override
     public void onEnable() {
@@ -65,7 +71,7 @@ public final class MoneyCraft extends JavaPlugin {
         itemStack.setItemMeta(meta);
         //財布レシピ登録
         NamespacedKey key = new NamespacedKey(this, "wallet");
-        ShapedRecipe recipe = new ShapedRecipe(key, itemStack);
+        recipe = new ShapedRecipe(key, itemStack);
         recipe.shape("LGL");
         recipe.setIngredient('L', Material.LEATHER);
         recipe.setIngredient('G', Material.GOLD_INGOT);
@@ -84,6 +90,34 @@ public final class MoneyCraft extends JavaPlugin {
                 }
             }
         }.runTaskTimer(this,0,5);
+
+        //雪玉版お金のダメージ処理
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                for(Player p:Bukkit.getOnlinePlayers()){
+                    for(Entity e:p.getNearbyEntities(0.5,0.5,0.5)){
+                        if(e instanceof Item){
+                            Item item = (Item)e;
+                            if(item.getItemStack().hasItemMeta()){
+                                if(item.getItemStack().getItemMeta().hasLore()) {
+                                    if (item.getItemStack().getItemMeta().getLore().get(0).equals("throw")) {
+                                        if(!item.getItemStack().getItemMeta().getLore().get(1).equals(p.getUniqueId().toString())) {
+                                            if (item.getVelocity().length()>0.1) {
+                                                p.damage(1.0);
+                                                p.setVelocity(item.getVelocity().add(new Vector(0,0.5,0)).normalize());
+                                                item.setVelocity(new Vector(0,0,0));
+                                                item.getItemStack().setLore(null);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }.runTaskTimer(this,0,1);
 
     }
 
@@ -138,6 +172,48 @@ public final class MoneyCraft extends JavaPlugin {
                 return 13;
             case "a07ec4df-3912-4197-b0f8-4ba0d4e26b43"://kuramochi
                 return 14;
+            case "e8cedf03-2f32-4bad-84ea-319596a68bb4"://macyakari
+                return 15;
+            case "155ed57d-c429-4a2a-b1ad-55b59a692a1b"://metabo
+                return 16;
+            case "3d348f08-e331-42c3-bdc5-1bf5f8c9431c"://ms
+                return 17;
+            case "50f6d44c-5927-495f-a41c-515c63766b28"://mugi
+                return 18;
+            case "03320008-f6d8-4b02-8704-ca5d545db98f"://norunoru
+                return 19;
+            case "c9ccf0bf-f8f8-4a7e-a6aa-bad2aeff8cff"://nojaja
+                return 20;
+            case "778a4470-448e-47f5-8d6a-c7dfd5d55f24"://sakigake
+                return 21;
+            case "c6bcac3d-93f6-4693-835b-096df6537b48"://senya
+                return 22;
+            case "6f5b4bae-5796-435b-a5e4-8cbac1d71969"://soubon
+                return 23;
+            case "9732f03f-66d0-41b5-90ec-b53bdbb3a551"://suzuki
+                return 24;
+            case "97911fc6-479e-4a11-83f8-3f7061ed82d3"://takasou
+                return 25;
+            case "114a1d83-9660-46e9-8651-7affc7b5e82e"://tubu
+                return 26;
+            case "5f46c120-fe9c-45f6-a867-80e671130a68"://uminya
+                return 27;
+            case "4d3487cf-0804-4410-8cce-53f0a19380a7"://yudon
+                return 28;
         }
+    }
+    public static ItemStack getWallet(OfflinePlayer player) {
+        ItemStack itemStack = new ItemStack(Material.WHEAT_SEEDS);
+        ItemMeta meta = itemStack.getItemMeta();
+        meta.setCustomModelData(getId(player));
+        List<String> lore = new ArrayList<>();
+        lore.add("Qで百円投げる");
+        lore.add("Shift+Qで千円投げる");
+        lore.add("右クリックで残高表示");
+        lore.add("Shift+右クリックでランキング表示");
+        meta.setLore(lore);
+        meta.setDisplayName(player.getName()+"の財布");
+        itemStack.setItemMeta(meta);
+        return itemStack;
     }
 }
