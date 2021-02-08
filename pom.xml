@@ -115,14 +115,14 @@
             <groupId>net.minecraft</groupId>
             <artifactId>server</artifactId>
             <version>1.15</version>
-            <systemPath>${basedir}/lib/server.jar</systemPath>
+            <systemPath>${basedir}/libs/server.jar</systemPath>
             <scope>system</scope>
         </dependency>
         <dependency>
             <groupId>unknown</groupId>
             <artifactId>aapi</artifactId>
             <version>unknown</version>
-            <systemPath>${basedir}/lib/ActionbarAPI.jar</systemPath>
+            <systemPath>${basedir}/libs/ActionbarAPI.jar</systemPath>
             <scope>system</scope>
         </dependency>
     </dependencies>

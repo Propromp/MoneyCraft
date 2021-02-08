@@ -199,7 +199,7 @@ public class PlayerEvent implements Listener {
     }
 
     @EventHandler
-    public void onPickup(PlayerAttemptPickupItemEvent e){//TODO syuusei
+    public void onPickup(PlayerAttemptPickupItemEvent e){
         Player player = e.getPlayer();
         if (e.getItem().getItemStack().getItemMeta().getDisplayName().equals("MoneyCraft")) {
             if (e.getItem().getItemStack().getType() == Material.GOLD_INGOT) {
