@@ -4,11 +4,9 @@ import net.DeeChael.ActionbarAPI.AAPI;
 import net.kunmc.lab.moneycraft.command.MoneyCommandExecutor;
 import net.kunmc.lab.moneycraft.effect.KeinEffect;
 import net.kunmc.lab.moneycraft.event.PlayerEvent;
-import net.kunmc.propromp.util.NBTUtil;
 import net.milkbowl.vault.economy.Economy;
-import net.minecraft.server.v1_15_R1.PacketPlayOutNamedSoundEffect;
 import org.bukkit.*;
-import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -18,15 +16,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scoreboard.DisplaySlot;
-import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.util.Consumer;
 import org.bukkit.util.Vector;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 public final class MoneyCraft extends JavaPlugin {
 
@@ -35,9 +28,11 @@ public final class MoneyCraft extends JavaPlugin {
     public static MoneyCraft instance;
     public static ShapedRecipe recipe;
 
+    public static FileConfiguration config;
+
     @Override
     public void onEnable() {
-        instance=this;
+        instance = this;
 
         getLogger().info("Hi!");
         getLogger().info(ChatColor.AQUA + "MONEYCRAFT BY PROPROMP");
@@ -78,35 +73,35 @@ public final class MoneyCraft extends JavaPlugin {
         Bukkit.addRecipe(recipe);
 
         //keinエフェクト
-        new KeinEffect().runTaskTimer(this,0,1);
+        new KeinEffect().runTaskTimer(this, 0, 1);
         KeinEffect.use = getConfig().getInt("part.kein");
 
         //アクションバー
         new BukkitRunnable() {
             @Override
             public void run() {
-                for(Player p:Bukkit.getOnlinePlayers()){
-                    AAPI.sendActionbar(p,"所持金:"+((int)getEconomy().getBalance(p))+"円");
+                for (Player p : Bukkit.getOnlinePlayers()) {
+                    AAPI.sendActionbar(p, "所持金:" + ((int) getEconomy().getBalance(p)) + "円");
                 }
             }
-        }.runTaskTimer(this,0,5);
+        }.runTaskTimer(this, 0, 5);
 
         //雪玉版お金のダメージ処理
         new BukkitRunnable() {
             @Override
             public void run() {
-                for(Player p:Bukkit.getOnlinePlayers()){
-                    for(Entity e:p.getNearbyEntities(0.5,0.5,0.5)){
-                        if(e instanceof Item){
-                            Item item = (Item)e;
-                            if(item.getItemStack().hasItemMeta()){
-                                if(item.getItemStack().getItemMeta().hasLore()) {
+                for (Player p : Bukkit.getOnlinePlayers()) {
+                    for (Entity e : p.getNearbyEntities(0.5, 0.5, 0.5)) {
+                        if (e instanceof Item) {
+                            Item item = (Item) e;
+                            if (item.getItemStack().hasItemMeta()) {
+                                if (item.getItemStack().getItemMeta().hasLore()) {
                                     if (item.getItemStack().getItemMeta().getLore().get(0).equals("throw")) {
-                                        if(!item.getItemStack().getItemMeta().getLore().get(1).equals(p.getUniqueId().toString())) {
-                                            if (item.getVelocity().length()>0.1) {
+                                        if (!item.getItemStack().getItemMeta().getLore().get(1).equals(p.getUniqueId().toString())) {
+                                            if (item.getVelocity().length() > 0.1) {
                                                 p.damage(1.0);
-                                                p.setVelocity(item.getVelocity().add(new Vector(0,0.5,0)).normalize());
-                                                item.setVelocity(new Vector(0,0,0));
+                                                p.setVelocity(item.getVelocity().add(new Vector(0, 0.5, 0)).normalize());
+                                                item.setVelocity(new Vector(0, 0, 0));
                                                 item.getItemStack().setLore(null);
                                             }
                                         }
@@ -117,7 +112,7 @@ public final class MoneyCraft extends JavaPlugin {
                     }
                 }
             }
-        }.runTaskTimer(this,0,1);
+        }.runTaskTimer(this, 0, 1);
 
     }
 
@@ -142,67 +137,19 @@ public final class MoneyCraft extends JavaPlugin {
         return true;
     }
 
-    public static int getId(OfflinePlayer player) {
-        switch (player.getUniqueId().toString()) {
-            default:
-                return 1;
-            case "a3abe1f9-cd08-46b1-9b39-919a3e6150f0"://fakevox
-                return 2;
-            case "6e8199a3-f28f-468f-a440-4ef55a1f7349"://famas
-                return 3;
-            case "3f7ccf72-3696-42dc-8eb8-2c813c79eef0"://gorillabbit
-                return 4;
-            case "1649ef8a-7ec4-4ad5-8234-5ad0709ad461"://himajin
-                return 5;
-            case "c789f61c-aaa2-44d3-a8f9-21ebf4b00199"://inkya
-                return 6;
-            case "fee48d55-0120-4e7c-bcf3-8e0ca0dbc265"://kakikama
-                return 7;
-            case "4f2a2943-2d95-4959-b53e-60cd86edd245"://kamesuta
-                return 8;
-            case "3c41637b-f0b9-4be2-b72d-7ef863741e07"://kantasuke
-                return 9;
-            case "7679239c-4eb5-4a18-bddb-874a849d75a7"://kikaru
-                return 10;
-            case "beb56e2b-5a93-4aff-a0a8-64dd731a9b53"://kirito
-                return 11;
-            case "713fdcc1-89a7-464c-b90c-346dd0d5fdac"://kono
-                return 12;
-            case "b08dbdaa-624b-456c-908d-e0ee1846c192"://koutan
-                return 13;
-            case "a07ec4df-3912-4197-b0f8-4ba0d4e26b43"://kuramochi
-                return 14;
-            case "e8cedf03-2f32-4bad-84ea-319596a68bb4"://macyakari
-                return 15;
-            case "155ed57d-c429-4a2a-b1ad-55b59a692a1b"://metabo
-                return 16;
-            case "3d348f08-e331-42c3-bdc5-1bf5f8c9431c"://ms
-                return 17;
-            case "50f6d44c-5927-495f-a41c-515c63766b28"://mugi
-                return 18;
-            case "03320008-f6d8-4b02-8704-ca5d545db98f"://norunoru
-                return 19;
-            case "c9ccf0bf-f8f8-4a7e-a6aa-bad2aeff8cff"://nojaja
-                return 20;
-            case "778a4470-448e-47f5-8d6a-c7dfd5d55f24"://sakigake
-                return 21;
-            case "c6bcac3d-93f6-4693-835b-096df6537b48"://senya
-                return 22;
-            case "6f5b4bae-5796-435b-a5e4-8cbac1d71969"://soubon
-                return 23;
-            case "9732f03f-66d0-41b5-90ec-b53bdbb3a551"://suzuki
-                return 24;
-            case "97911fc6-479e-4a11-83f8-3f7061ed82d3"://takasou
-                return 25;
-            case "114a1d83-9660-46e9-8651-7affc7b5e82e"://tubu
-                return 26;
-            case "5f46c120-fe9c-45f6-a867-80e671130a68"://uminya
-                return 27;
-            case "4d3487cf-0804-4410-8cce-53f0a19380a7"://yudon
-                return 28;
+    public int getId(OfflinePlayer player) {
+        Map<String,Integer> map = new HashMap<>();
+        getConfig().getConfigurationSection("uuid.wallet").getKeys(false).forEach(
+                key -> map.put(key,getConfig().getInt("uuid.wallet."+key))
+        );
+        if(map.containsKey(player.getUniqueId().toString())){
+            return map.get(player.getUniqueId().toString());
+        } else {
+            return map.get("default");
         }
     }
-    public static ItemStack getWallet(OfflinePlayer player) {
+
+    public ItemStack getWallet(OfflinePlayer player) {
         ItemStack itemStack = new ItemStack(Material.WHEAT_SEEDS);
         ItemMeta meta = itemStack.getItemMeta();
         meta.setCustomModelData(getId(player));
@@ -212,7 +159,7 @@ public final class MoneyCraft extends JavaPlugin {
         lore.add("右クリックで残高表示");
         lore.add("Shift+右クリックでランキング表示");
         meta.setLore(lore);
-        meta.setDisplayName(player.getName()+"の財布");
+        meta.setDisplayName(player.getName() + "の財布");
         itemStack.setItemMeta(meta);
         return itemStack;
     }
