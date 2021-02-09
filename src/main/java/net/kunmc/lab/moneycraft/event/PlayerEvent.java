@@ -212,9 +212,9 @@ public class PlayerEvent implements Listener {
                 e.setCancelled(true);
             }
             for(int i = 0; i < 360; i += 20){
-                var radian = Math.toRadians(i);
-                var x = Math.sin(radian);
-                var z = Math.cos(radian);
+                double radian = Math.toRadians(i);
+                double x = Math.sin(radian);
+                double z = Math.cos(radian);
                 sendFakeParticleToAll(Particles.FLAME,player.getLocation().add(x,1.5,z));
             }
             e.getItem().setGravity(false);
@@ -289,9 +289,9 @@ public class PlayerEvent implements Listener {
     }
     public void pickupParticle(Location loc){
         for(int i = 0; i < 360; i += 20){
-            var radian = Math.toRadians(i);
-            var x = Math.sin(radian);
-            var z = Math.cos(radian);
+            double radian = Math.toRadians(i);
+            double x = Math.sin(radian);
+            double z = Math.cos(radian);
             sendFakeParticleToAll(Particles.FLAME,loc.add(x,0,z));
         }
     }
@@ -301,7 +301,7 @@ public class PlayerEvent implements Listener {
         }
     }
     private static void sendFakeParticle(ParticleType type, Location loc, Player player){
-        var packet = new PacketPlayOutWorldParticles(type,false,loc.getX(),loc.getY(),loc.getZ(),0f,0.1f,0f,1f,0);
+        PacketPlayOutWorldParticles packet = new PacketPlayOutWorldParticles(type,false,loc.getX(),loc.getY(),loc.getZ(),0f,0.1f,0f,1f,0);
         ((CraftPlayer)player).getHandle().playerConnection.sendPacket(packet);
     }
 }
