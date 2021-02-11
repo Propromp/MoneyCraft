@@ -14,19 +14,20 @@ import java.util.List;
 public class MoneyCraftAPI {
     /**
      * 金をドロップします
-     * @param player 残高を引くプレイヤー。balance,threwがfalseの場合はnull可
+     *
+     * @param player   残高を引くプレイヤー。balance,threwがfalseの場合はnull可
      * @param location 落とす場所
-     * @param type 落とす金の種類(100or1000)
-     * @param amount 落とす枚数
-     * @param threw playerがこのアイテムを拾えるかどうか
-     * @param balance 残高を引くかどうか
+     * @param type     落とす金の種類(100or1000)
+     * @param amount   落とす枚数
+     * @param threw    playerがこのアイテムを拾えるかどうか
+     * @param balance  残高を引くかどうか
      * @return ドロップアイテムのエンティティのインスタンス
      */
-    public static Item dropMoney(Player player,Location location, int type, int amount,boolean threw,boolean balance) {
-        Item droppedItem = null;
-        switch(type){
+    public static Item dropMoney(Player player, Location location, int type, int amount, boolean threw, boolean balance) {
+        Item droppedItem;
+        switch (type) {
             case 100:
-                ItemStack item = new ItemStack(Material.GOLD_NUGGET,amount);
+                ItemStack item = new ItemStack(Material.GOLD_NUGGET, amount);
                 ItemMeta meta = item.getItemMeta();
                 meta.setDisplayName("MoneyCraft");
                 meta.setCustomModelData(100);
@@ -34,7 +35,7 @@ public class MoneyCraftAPI {
                 droppedItem = location.getWorld().dropItem(location, item);
                 break;
             case 1000:
-                ItemStack item2 = new ItemStack(Material.GOLD_INGOT,amount);
+                ItemStack item2 = new ItemStack(Material.GOLD_INGOT, amount);
                 ItemMeta meta2 = item2.getItemMeta();
                 meta2.setDisplayName("MoneyCraft");
                 meta2.setCustomModelData(1000);
@@ -44,7 +45,7 @@ public class MoneyCraftAPI {
             default:
                 return null;
         }
-        if(threw){
+        if (threw) {
             List<String> lore = new ArrayList<>();
             lore.add("threw");
             lore.add(player.getUniqueId().toString());
@@ -52,8 +53,8 @@ public class MoneyCraftAPI {
             meta.setLore(lore);
             droppedItem.getItemStack().setItemMeta(meta);
         }
-        if(balance){
-            MoneyCraft.getEconomy().depositPlayer(player,-type);
+        if (balance) {
+            MoneyCraft.getEconomy().depositPlayer(player, -(type * amount));
         }
         return droppedItem;
     }
