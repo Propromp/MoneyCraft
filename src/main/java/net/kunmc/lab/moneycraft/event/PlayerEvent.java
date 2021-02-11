@@ -212,9 +212,18 @@ public class PlayerEvent implements Listener {
             if(e.getCursor().hasItemMeta()){
                 if(e.getCursor().getItemMeta().hasCustomModelData()){
                     e.setCursor(MoneyCraft.instance.getWallet((OfflinePlayer) e.getWhoClicked()));
+                    new BukkitRunnable(){
+                        @Override
+                        public void run() {
+                            ((Player)e.getWhoClicked()).updateInventory();
+                        }
+                    }.runTaskLater(MoneyCraft.instance,1);
                 }
             }
         }
+    }
+    @EventHandler
+    public void onRecipe(CraftItemEvent e){
     }
     public void pickupParticle(Location loc){
         for(int i = 0; i < 360; i += 20){
