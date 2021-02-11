@@ -224,15 +224,9 @@ public class PlayerEvent implements Listener {
     }
     @EventHandler
     public void onRecipe(CraftItemEvent e){
+        e.setCurrentItem(MoneyCraft.instance.getWallet((OfflinePlayer) e.getWhoClicked()));
     }
-    public void pickupParticle(Location loc){
-        for(int i = 0; i < 360; i += 20){
-            double radian = Math.toRadians(i);
-            double x = Math.sin(radian);
-            double z = Math.cos(radian);
-            sendFakeParticleToAll(Particles.FLAME,loc.add(x,0,z));
-        }
-    }
+
     private static void sendFakeParticleToAll(ParticleType type,Location loc){
         for(Player p:Bukkit.getOnlinePlayers()){
             sendFakeParticle(type,loc,p);
