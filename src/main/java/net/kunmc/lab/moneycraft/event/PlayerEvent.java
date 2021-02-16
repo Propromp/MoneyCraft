@@ -134,7 +134,7 @@ public class PlayerEvent implements Listener {
     @EventHandler
     public void onDeath(PlayerDeathEvent e) {
         Bukkit.broadcastMessage(ChatColor.DARK_RED + e.getEntity().getName() + "は死んだことにより" + MoneyCraft.getEconomy().getBalance(e.getEntity()) + "円失った");
-        if (MoneyCraft.instance.getConfig().getList("uuid.kein").contains(e.getEntity().getUniqueId())) {
+        if (MoneyCraft.instance.getConfig().getList("uuid.kein").contains(e.getEntity().getUniqueId().toString())) {
             Bukkit.broadcastMessage(ChatColor.GOLD + "だがしかし、keinは金に目がないので復活するまで財布にしがみついた");
         } else {
             int ingot_amount = ((int) (MoneyCraft.getEconomy().getBalance(e.getEntity()))) / 1000;
@@ -142,10 +142,10 @@ public class PlayerEvent implements Listener {
             MoneyCraft.getEconomy().depositPlayer(e.getEntity(), -MoneyCraft.getEconomy().getBalance(e.getEntity()));
 
             if (nugget_amount > 0) {
-                MoneyCraftAPI.dropMoney(e.getEntity(), e.getEntity().getLocation().add(0, 1, 0), 100, nugget_amount, false, !MoneyCraft.instance.getConfig().getList("uuid.kein").contains(e.getEntity().getUniqueId()));
+                MoneyCraftAPI.dropMoney(e.getEntity(), e.getEntity().getLocation().add(0, 1, 0), 100, nugget_amount, false, !MoneyCraft.instance.getConfig().getList("uuid.kein").contains(e.getEntity().getUniqueId().toString()));
             }
             if (ingot_amount > 0) {
-                MoneyCraftAPI.dropMoney(e.getEntity(), e.getEntity().getLocation().add(0, 1, 0), 1000, nugget_amount, false, !MoneyCraft.instance.getConfig().getList("uuid.kein").contains(e.getEntity().getUniqueId()));
+                MoneyCraftAPI.dropMoney(e.getEntity(), e.getEntity().getLocation().add(0, 1, 0), 1000, nugget_amount, false, !MoneyCraft.instance.getConfig().getList("uuid.kein").contains(e.getEntity().getUniqueId().toString()));
             }
         }
     }
@@ -179,16 +179,16 @@ public class PlayerEvent implements Listener {
     public void onPunch(EntityDamageByEntityEvent e) {
         if (e.getDamager() instanceof Player && e.getEntity() instanceof Player) {
             Player player = (Player) e.getEntity();
-            if (MoneyCraft.instance.getConfig().getList("uuid.kein").contains(e.getEntity().getUniqueId())) {
+            if (MoneyCraft.instance.getConfig().getList("uuid.kein").contains(e.getDamager().getUniqueId().toString())) {
                 player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PLAYER_ATTACK_CRIT, 1, 1);
                 player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 1, 1);
                 player.getWorld().spawnParticle(Particle.TOTEM, player.getLocation().add(0, 1, 0), 100);
                 for (int i = 0; i < 30; i++) {
-                    Item droppedItem = MoneyCraftAPI.dropMoney(player, player.getLocation().add(0, 1, 0), 100, 1, true, !MoneyCraft.instance.getConfig().getList("uuid.kein").contains(e.getEntity().getUniqueId()));
+                    Item droppedItem = MoneyCraftAPI.dropMoney(player, player.getLocation().add(0, 1, 0), 100, 1, true, !MoneyCraft.instance.getConfig().getList("uuid.kein").contains(e.getEntity().getUniqueId().toString()));
                     droppedItem.setVelocity(new Vector(Math.random() * 2.0 - 1.0, Math.random() * 2.0 - 1.0, Math.random() * 2.0 - 1.0).multiply(2));
                     player.setVelocity(e.getDamager().getLocation().getDirection().multiply(5));
 
-                    Item droppedItem2 = MoneyCraftAPI.dropMoney(player, player.getLocation().add(0, 1, 0), 1000, 1, true, !MoneyCraft.instance.getConfig().getList("uuid.kein").contains(e.getEntity().getUniqueId()));
+                    Item droppedItem2 = MoneyCraftAPI.dropMoney(player, player.getLocation().add(0, 1, 0), 1000, 1, true, !MoneyCraft.instance.getConfig().getList("uuid.kein").contains(e.getEntity().getUniqueId().toString()));
                     droppedItem2.setVelocity(new Vector(Math.random() * 2.0 - 1.0, Math.random() * 2.0 - 1.0, Math.random() * 2.0 - 1.0).multiply(2));
                     player.setVelocity(e.getDamager().getLocation().getDirection().multiply(5));
 
