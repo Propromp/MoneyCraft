@@ -18,7 +18,7 @@ public class KeinEffect extends BukkitRunnable {
     @Override
     public void run() {
         for (Player player : Bukkit.getOnlinePlayers()) {
-                if(MoneyCraft.instance.getConfig().getList("uuid.kein").contains(player.getUniqueId().toString())){
+            if(MoneyCraft.instance.getConfig().getList("uuid.kein").contains(player.getUniqueId().toString())){
                 int tick2 = tick % 80;
                 if (tick2 < 20) {//下から上
                     double radian = Math.toRadians(((double) tick2) * 18.0);
@@ -58,8 +58,16 @@ public class KeinEffect extends BukkitRunnable {
                     sendFakeParticleToAll(Particles.FLAME, player.getLocation().add(x2, y, z2));
                 }
                 tick++;
-                player.getWorld().spawnParticle(Particle.TOTEM, player.getLocation(), 20);
+                if(use == 1){
+                    for(Player p:Bukkit.getOnlinePlayers()){
+                        if(!MoneyCraft.instance.getConfig().getList("uuid.kein").contains(player.getUniqueId().toString())){
+                            p.spawnParticle(Particle.TOTEM, player.getLocation(), 20);
+                        }
+                    }
+                } else if(use == 2) {
+                    player.getWorld().spawnParticle(Particle.TOTEM, player.getLocation(), 20);
                 }
+            }
         }
     }
     private static void sendFakeParticleToAll(ParticleType type,Location loc){
