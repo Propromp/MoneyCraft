@@ -29,7 +29,7 @@ public class MoneyCommand {
         player.sendMessage("-----["+ ChatColor.DARK_PURPLE+"ホームレス一覧"+ChatColor.RESET+"]-----");
         for (OfflinePlayer p : Bukkit.getOfflinePlayers()) {
             if (MoneyCraft.getEconomy().getBalance(p) == 0) {
-                player.sendMessage(p.getName() + ",");
+                player.sendMessage(p.getName());
             }
         }
         player.sendMessage("-----["+ ChatColor.DARK_PURPLE+"ホームレス一覧"+ChatColor.RESET+"]-----");
@@ -38,7 +38,7 @@ public class MoneyCommand {
     public static void kein(Player player, Command command, String label, String[] args) {
         if(player.hasPermission("moneycraft.kein")){
             KeinEffect.use = Integer.valueOf(args[1]);
-
+            player.sendMessage("keineffectの値を"+args[1]+"に設定しました");
         } else {
             player.sendMessage("権限がないよwwww");
         }

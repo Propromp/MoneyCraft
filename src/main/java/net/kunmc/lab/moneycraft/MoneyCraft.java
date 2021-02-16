@@ -96,7 +96,7 @@ public final class MoneyCraft extends JavaPlugin {
                             Item item = (Item) e;
                             if (item.getItemStack().hasItemMeta()) {
                                 if (item.getItemStack().getItemMeta().hasLore()) {
-                                    if (item.getItemStack().getItemMeta().getLore().get(0).equals("throw")) {
+                                    if (item.getItemStack().getItemMeta().getLore().get(0).equals("threw")) {
                                         if (!item.getItemStack().getItemMeta().getLore().get(1).equals(p.getUniqueId().toString())) {
                                             if (item.getVelocity().length() > 0.1) {
                                                 p.damage(1.0);
