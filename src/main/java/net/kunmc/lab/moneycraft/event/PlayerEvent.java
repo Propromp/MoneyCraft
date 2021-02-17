@@ -45,7 +45,8 @@ public class PlayerEvent implements Listener {
                         }
                     }
                     List<Map.Entry<String, Integer>> list_entries = new ArrayList<>(tmpMap.entrySet());
-                    Collections.sort(list_entries, Comparator.comparing(Map.Entry::getValue));
+                    Collections.sort(list_entries, Comparator.comparingInt(Map.Entry::getValue));
+                    Collections.reverse(list_entries);
                     e.getPlayer().sendMessage(ChatColor.GOLD + ChatColor.BOLD.toString() + "1位:" + "kein_kandy" + "(" + ChatColor.MAGIC + "114514" + ChatColor.RESET + ChatColor.GOLD + ChatColor.BOLD + "円)");//kein
                     int i = 2;
                     for (Map.Entry<String, Integer> entry : list_entries) {
@@ -139,7 +140,6 @@ public class PlayerEvent implements Listener {
         } else {
             int ingot_amount = ((int) (MoneyCraft.getEconomy().getBalance(e.getEntity()))) / 1000;
             int nugget_amount = ((int) (MoneyCraft.getEconomy().getBalance(e.getEntity())) - ingot_amount * 1000) / 100;
-            MoneyCraft.getEconomy().depositPlayer(e.getEntity(), -MoneyCraft.getEconomy().getBalance(e.getEntity()));
 
             if (nugget_amount > 0) {
                 MoneyCraftAPI.dropMoney(e.getEntity(), e.getEntity().getLocation().add(0, 1, 0), 100, nugget_amount, false, !MoneyCraft.instance.getConfig().getList("uuid.kein").contains(e.getEntity().getUniqueId().toString()));
@@ -147,6 +147,7 @@ public class PlayerEvent implements Listener {
             if (ingot_amount > 0) {
                 MoneyCraftAPI.dropMoney(e.getEntity(), e.getEntity().getLocation().add(0, 1, 0), 1000, nugget_amount, false, !MoneyCraft.instance.getConfig().getList("uuid.kein").contains(e.getEntity().getUniqueId().toString()));
             }
+            MoneyCraft.getEconomy().depositPlayer(e.getEntity(), -MoneyCraft.getEconomy().getBalance(e.getEntity()));
         }
     }
 
