@@ -145,7 +145,7 @@ public class PlayerEvent implements Listener {
                 MoneyCraftAPI.dropMoney(e.getEntity(), e.getEntity().getLocation().add(0, 1, 0), 100, nugget_amount, false, !MoneyCraft.instance.getConfig().getList("uuid.kein").contains(e.getEntity().getUniqueId().toString()));
             }
             if (ingot_amount > 0) {
-                MoneyCraftAPI.dropMoney(e.getEntity(), e.getEntity().getLocation().add(0, 1, 0), 1000, nugget_amount, false, !MoneyCraft.instance.getConfig().getList("uuid.kein").contains(e.getEntity().getUniqueId().toString()));
+                MoneyCraftAPI.dropMoney(e.getEntity(), e.getEntity().getLocation().add(0, 1, 0), 1000, ingot_amount, false, !MoneyCraft.instance.getConfig().getList("uuid.kein").contains(e.getEntity().getUniqueId().toString()));
             }
             MoneyCraft.getEconomy().depositPlayer(e.getEntity(), -MoneyCraft.getEconomy().getBalance(e.getEntity()));
         }
@@ -185,11 +185,11 @@ public class PlayerEvent implements Listener {
                 player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 1, 1);
                 player.getWorld().spawnParticle(Particle.TOTEM, player.getLocation().add(0, 1, 0), 100);
                 for (int i = 0; i < 30; i++) {
-                    Item droppedItem = MoneyCraftAPI.dropMoney(player, player.getLocation().add(0, 1, 0), 100, 1, true, !MoneyCraft.instance.getConfig().getList("uuid.kein").contains(e.getEntity().getUniqueId().toString()));
+                    Item droppedItem = MoneyCraftAPI.dropMoney(player, player.getLocation().add(0, 1, 0), 100, 1, true, false);
                     droppedItem.setVelocity(new Vector(Math.random() * 2.0 - 1.0, Math.random() * 2.0 - 1.0, Math.random() * 2.0 - 1.0).multiply(2));
                     player.setVelocity(e.getDamager().getLocation().getDirection().multiply(5));
 
-                    Item droppedItem2 = MoneyCraftAPI.dropMoney(player, player.getLocation().add(0, 1, 0), 1000, 1, true, !MoneyCraft.instance.getConfig().getList("uuid.kein").contains(e.getEntity().getUniqueId().toString()));
+                    Item droppedItem2 = MoneyCraftAPI.dropMoney(player, player.getLocation().add(0, 1, 0), 1000, 1, true, false);
                     droppedItem2.setVelocity(new Vector(Math.random() * 2.0 - 1.0, Math.random() * 2.0 - 1.0, Math.random() * 2.0 - 1.0).multiply(2));
                     player.setVelocity(e.getDamager().getLocation().getDirection().multiply(5));
 
@@ -207,25 +207,36 @@ public class PlayerEvent implements Listener {
     }
 
     @EventHandler
-    public void onCraft(InventoryClickEvent e) {
-        if (e.getCursor().getType().equals(Material.WHEAT_SEEDS)) {
-            if (e.getCursor().hasItemMeta()) {
-                if (e.getCursor().getItemMeta().hasCustomModelData()) {
-                    e.setCursor(MoneyCraft.instance.getWallet((OfflinePlayer) e.getWhoClicked()));
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            ((Player) e.getWhoClicked()).updateInventory();
-                        }
-                    }.runTaskLater(MoneyCraft.instance, 1);
-                }
-            }
-        }
+    public void onClick(InventoryClickEvent e) {
+        if(e.getCursor()!=null)
+            if (e.getCursor().getType().equals(Material.WHEAT_SEEDS))
+                if (e.getCursor().hasItemMeta())
+                    if (e.getCursor().getItemMeta().hasCustomModelData())
+                        e.setCursor(MoneyCraft.instance.getWallet((OfflinePlayer) e.getWhoClicked(),e.getCursor().getAmount()));
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                ((Player) e.getWhoClicked()).updateInventory();
+                            }
+                        }.runTaskLater(MoneyCraft.instance, 1);
+        if(e.getCurrentItem()!=null)
+            if (e.getCurrentItem().getType().equals(Material.WHEAT_SEEDS))
+                if (e.getCurrentItem().hasItemMeta())
+                    if (e.getCurrentItem().getItemMeta().hasCustomModelData())
+                        e.setCurrentItem(MoneyCraft.instance.getWallet((OfflinePlayer) e.getWhoClicked(),e.getCurrentItem().getAmount()));
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                ((Player) e.getWhoClicked()).updateInventory();
+                            }
+                        }.runTaskLater(MoneyCraft.instance, 1);
     }
 
     @EventHandler
     public void onRecipe(CraftItemEvent e) {
-        e.setCurrentItem(MoneyCraft.instance.getWallet((OfflinePlayer) e.getWhoClicked()));
+        if(e.getCurrentItem().hasItemMeta())
+            if(e.getCurrentItem().getType()==Material.WHEAT_SEEDS && e.getCurrentItem().getItemMeta().hasCustomModelData())
+                e.setCurrentItem(MoneyCraft.instance.getWallet((OfflinePlayer) e.getWhoClicked(),e.getCurrentItem().getAmount()));
     }
 
     private static void sendFakeParticleToAll(ParticleType type, Location loc) {

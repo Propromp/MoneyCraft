@@ -60,7 +60,7 @@ public class KeinEffect extends BukkitRunnable {
                 tick++;
                 if(use == 1){
                     for(Player p:Bukkit.getOnlinePlayers()){
-                        if(!MoneyCraft.instance.getConfig().getList("uuid.kein").contains(player.getUniqueId().toString())){
+                        if(!MoneyCraft.instance.getConfig().getList("uuid.kein").contains(p.getUniqueId().toString())){
                             p.spawnParticle(Particle.TOTEM, player.getLocation(), 20);
                         }
                     }
@@ -74,10 +74,9 @@ public class KeinEffect extends BukkitRunnable {
         switch (use) {
             case 0:break;
             case 1:
-                for (Player p : Bukkit.getOnlinePlayers()) {
+                for (Player p : Bukkit.getOnlinePlayers())
                     if(!MoneyCraft.instance.getConfig().getList("uuid.kein").contains(p.getUniqueId().toString()))
                         sendFakeParticle(p, type, loc);
-                }
                 break;
             case 2:
                 for (Player p : Bukkit.getOnlinePlayers()) {

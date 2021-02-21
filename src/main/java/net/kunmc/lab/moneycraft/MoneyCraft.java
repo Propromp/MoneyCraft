@@ -49,6 +49,7 @@ public final class MoneyCraft extends JavaPlugin {
         //コンフィグ
         saveDefaultConfig();
 
+
         //イベント登録
         Bukkit.getPluginManager().registerEvents(new PlayerEvent(), this);
 
@@ -118,6 +119,7 @@ public final class MoneyCraft extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        saveConfig();
         getLogger().info("Bay!");
     }
 
@@ -149,7 +151,7 @@ public final class MoneyCraft extends JavaPlugin {
         }
     }
 
-    public ItemStack getWallet(OfflinePlayer player) {
+    public ItemStack getWallet(OfflinePlayer player,int amount) {
         ItemStack itemStack = new ItemStack(Material.WHEAT_SEEDS);
         ItemMeta meta = itemStack.getItemMeta();
         meta.setCustomModelData(getId(player));
@@ -161,6 +163,7 @@ public final class MoneyCraft extends JavaPlugin {
         meta.setLore(lore);
         meta.setDisplayName(player.getName() + "の財布");
         itemStack.setItemMeta(meta);
+        itemStack.setAmount(amount);
         return itemStack;
     }
 }
