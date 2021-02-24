@@ -19,10 +19,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.PlayerAttemptPickupItemEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -154,15 +151,20 @@ public class PlayerEvent implements Listener {
     }
 
     @EventHandler
-    public void onPickup(PlayerAttemptPickupItemEvent e) {
+    public void onPickup(PlayerPickupItemEvent e) {
         Player player = e.getPlayer();
-        if(e.getItem().getItemStack().hasItemMeta())
-            if(e.getItem().getItemStack().getItemMeta().hasLore())
-                if(e.getItem().getItemStack().getItemMeta().getLore().get(0).equals("threw"))
-                    if(e.getItem().getItemStack().getItemMeta().getLore().get(1).equals(e.getPlayer().getUniqueId().toString())){
-                        e.setCancelled(true);
-                        return;
+        if (e.getItem().getItemStack().hasItemMeta()) {
+            if (e.getItem().getItemStack().getItemMeta().hasLore()) {
+                if (e.getItem().getItemStack().getItemMeta().getLore().size() >= 2) {
+                    if (e.getItem().getItemStack().getItemMeta().getLore().get(0).equals("threw")) {
+                        if (e.getItem().getItemStack().getItemMeta().getLore().get(1).equals(e.getPlayer().getUniqueId().toString())) {
+                            e.setCancelled(true);
+                            return;
+                        }
                     }
+                }
+            }
+        }
         if (e.getItem().getItemStack().getItemMeta().getDisplayName().equals("MoneyCraft")) {
             if (e.getItem().getItemStack().getType() == Material.GOLD_INGOT) {
                 player.sendTitle("", e.getItem().getItemStack().getAmount() * 1000 + "円を財布に入れました。", 5, 10, 5);
