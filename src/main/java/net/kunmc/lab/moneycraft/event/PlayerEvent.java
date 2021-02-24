@@ -156,6 +156,13 @@ public class PlayerEvent implements Listener {
     @EventHandler
     public void onPickup(PlayerAttemptPickupItemEvent e) {
         Player player = e.getPlayer();
+        if(e.getItem().getItemStack().hasItemMeta())
+            if(e.getItem().getItemStack().getItemMeta().hasLore())
+                if(e.getItem().getItemStack().getItemMeta().getLore().get(0) =="threw")
+                    if(e.getItem().getItemStack().getItemMeta().getLore().get(1) ==e.getPlayer().getUniqueId().toString()){
+                        e.setCancelled(true);
+                        return;
+                    }
         if (e.getItem().getItemStack().getItemMeta().getDisplayName().equals("MoneyCraft")) {
             if (e.getItem().getItemStack().getType() == Material.GOLD_INGOT) {
                 player.sendTitle("", e.getItem().getItemStack().getAmount() * 1000 + "円を財布に入れました。", 5, 10, 5);
