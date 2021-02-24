@@ -32,45 +32,47 @@ public class PlayerEvent implements Listener {
     @EventHandler
     public void onRightClick(PlayerInteractEvent e) {
         if (e.getAction().equals(Action.RIGHT_CLICK_AIR)) {
-            if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getCustomModelData() >= 1 && e.getPlayer().getInventory().getItemInMainHand().getType() == Material.WHEAT_SEEDS) {
-                if (e.getPlayer().isSneaking()) {//Shift
-                    e.getPlayer().sendMessage("-----[" + ChatColor.GOLD + "長者番付" + ChatColor.RESET + "]-----");
-                    Map<String, Integer> tmpMap = new HashMap<>();
-                    List<String> zeroList = new ArrayList<>();
-                    for (OfflinePlayer player : Bukkit.getOfflinePlayers()) {
-                        if (MoneyCraft.getEconomy().getBalance(player) == 0) {
-                            zeroList.add(player.getName());
-                        } else {
-                            tmpMap.put(player.getName(), (int) MoneyCraft.getEconomy().getBalance(player));
+            if (e.getPlayer().getInventory().getItemInMainHand().hasItemMeta())
+                if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().hasCustomModelData())
+                    if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getCustomModelData() >= 1 && e.getPlayer().getInventory().getItemInMainHand().getType() == Material.WHEAT_SEEDS) {
+                        if (e.getPlayer().isSneaking()) {//Shift
+                            e.getPlayer().sendMessage("-----[" + ChatColor.GOLD + "長者番付" + ChatColor.RESET + "]-----");
+                            Map<String, Integer> tmpMap = new HashMap<>();
+                            List<String> zeroList = new ArrayList<>();
+                            for (OfflinePlayer player : Bukkit.getOfflinePlayers()) {
+                                if (MoneyCraft.getEconomy().getBalance(player) == 0) {
+                                    zeroList.add(player.getName());
+                                } else {
+                                    tmpMap.put(player.getName(), (int) MoneyCraft.getEconomy().getBalance(player));
+                                }
+                            }
+                            List<Map.Entry<String, Integer>> list_entries = new ArrayList<>(tmpMap.entrySet());
+                            Collections.sort(list_entries, Comparator.comparingInt(Map.Entry::getValue));
+                            Collections.reverse(list_entries);
+                            e.getPlayer().sendMessage(ChatColor.GOLD + ChatColor.BOLD.toString() + "1位:" + "kein_kandy" + "(" + ChatColor.MAGIC + "114514" + ChatColor.RESET + ChatColor.GOLD + ChatColor.BOLD + "円)");//kein
+                            int i = 2;
+                            for (Map.Entry<String, Integer> entry : list_entries) {
+                                if (!entry.getKey().equals("kein_kandy")) {
+                                    e.getPlayer().sendMessage(i + "位:" + entry.getKey() + "(" + entry.getValue() + "円)");
+                                    i++;
+                                }
+                            }
+                            //所持金0人
+                            TextComponent text = new TextComponent(ChatColor.UNDERLINE + "クリックでホームレス一覧を見る");
+                            text.setClickEvent(new net.md_5.bungee.api.chat.ClickEvent(net.md_5.bungee.api.chat.ClickEvent.Action.RUN_COMMAND, "/mcr zerolist"));
+                            e.getPlayer().spigot().sendMessage(text);
+
+
+                            e.getPlayer().sendMessage("-----[" + ChatColor.GOLD + "長者番付" + ChatColor.RESET + "]-----");
+
+                        } else {//not shift
+                            if (MoneyCraft.instance.getConfig().getList("uuid.kein").contains(e.getPlayer().getUniqueId().toString())) {//kein
+                                e.getPlayer().sendMessage("残高：" + ChatColor.MAGIC + "114514" + ChatColor.RESET + "円");
+                            } else {
+                                e.getPlayer().sendMessage("残高：" + MoneyCraft.getEconomy().getBalance(e.getPlayer()) + "円");
+                            }
                         }
                     }
-                    List<Map.Entry<String, Integer>> list_entries = new ArrayList<>(tmpMap.entrySet());
-                    Collections.sort(list_entries, Comparator.comparingInt(Map.Entry::getValue));
-                    Collections.reverse(list_entries);
-                    e.getPlayer().sendMessage(ChatColor.GOLD + ChatColor.BOLD.toString() + "1位:" + "kein_kandy" + "(" + ChatColor.MAGIC + "114514" + ChatColor.RESET + ChatColor.GOLD + ChatColor.BOLD + "円)");//kein
-                    int i = 2;
-                    for (Map.Entry<String, Integer> entry : list_entries) {
-                        if(!entry.getKey().equals("kein_kandy")) {
-                            e.getPlayer().sendMessage(i + "位:" + entry.getKey() + "(" + entry.getValue() + "円)");
-                            i++;
-                        }
-                    }
-                    //所持金0人
-                    TextComponent text = new TextComponent(ChatColor.UNDERLINE + "クリックでホームレス一覧を見る");
-                    text.setClickEvent(new net.md_5.bungee.api.chat.ClickEvent(net.md_5.bungee.api.chat.ClickEvent.Action.RUN_COMMAND, "/mcr zerolist"));
-                    e.getPlayer().spigot().sendMessage(text);
-
-
-                    e.getPlayer().sendMessage("-----[" + ChatColor.GOLD + "長者番付" + ChatColor.RESET + "]-----");
-
-                } else {//not shift
-                    if (MoneyCraft.instance.getConfig().getList("uuid.kein").contains(e.getPlayer().getUniqueId().toString())) {//kein
-                        e.getPlayer().sendMessage("残高：" + ChatColor.MAGIC + "114514" + ChatColor.RESET + "円");
-                    } else {
-                        e.getPlayer().sendMessage("残高：" + MoneyCraft.getEconomy().getBalance(e.getPlayer()) + "円");
-                    }
-                }
-            }
         }
     }
 
@@ -208,35 +210,35 @@ public class PlayerEvent implements Listener {
 
     @EventHandler
     public void onClick(InventoryClickEvent e) {
-        if(e.getCursor()!=null)
+        if (e.getCursor() != null)
             if (e.getCursor().getType().equals(Material.WHEAT_SEEDS))
                 if (e.getCursor().hasItemMeta())
                     if (e.getCursor().getItemMeta().hasCustomModelData())
-                        e.setCursor(MoneyCraft.instance.getWallet((OfflinePlayer) e.getWhoClicked(),e.getCursor().getAmount()));
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                ((Player) e.getWhoClicked()).updateInventory();
-                            }
-                        }.runTaskLater(MoneyCraft.instance, 1);
-        if(e.getCurrentItem()!=null)
+                        e.setCursor(MoneyCraft.instance.getWallet((OfflinePlayer) e.getWhoClicked(), e.getCursor().getAmount()));
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                ((Player) e.getWhoClicked()).updateInventory();
+            }
+        }.runTaskLater(MoneyCraft.instance, 1);
+        if (e.getCurrentItem() != null)
             if (e.getCurrentItem().getType().equals(Material.WHEAT_SEEDS))
                 if (e.getCurrentItem().hasItemMeta())
                     if (e.getCurrentItem().getItemMeta().hasCustomModelData())
-                        e.setCurrentItem(MoneyCraft.instance.getWallet((OfflinePlayer) e.getWhoClicked(),e.getCurrentItem().getAmount()));
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                ((Player) e.getWhoClicked()).updateInventory();
-                            }
-                        }.runTaskLater(MoneyCraft.instance, 1);
+                        e.setCurrentItem(MoneyCraft.instance.getWallet((OfflinePlayer) e.getWhoClicked(), e.getCurrentItem().getAmount()));
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                ((Player) e.getWhoClicked()).updateInventory();
+            }
+        }.runTaskLater(MoneyCraft.instance, 1);
     }
 
     @EventHandler
     public void onRecipe(CraftItemEvent e) {
-        if(e.getCurrentItem().hasItemMeta())
-            if(e.getCurrentItem().getType()==Material.WHEAT_SEEDS && e.getCurrentItem().getItemMeta().hasCustomModelData())
-                e.setCurrentItem(MoneyCraft.instance.getWallet((OfflinePlayer) e.getWhoClicked(),e.getCurrentItem().getAmount()));
+        if (e.getCurrentItem().hasItemMeta())
+            if (e.getCurrentItem().getType() == Material.WHEAT_SEEDS && e.getCurrentItem().getItemMeta().hasCustomModelData())
+                e.setCurrentItem(MoneyCraft.instance.getWallet((OfflinePlayer) e.getWhoClicked(), e.getCurrentItem().getAmount()));
     }
 
     private static void sendFakeParticleToAll(ParticleType type, Location loc) {
