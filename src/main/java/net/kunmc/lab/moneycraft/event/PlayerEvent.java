@@ -158,8 +158,8 @@ public class PlayerEvent implements Listener {
         Player player = e.getPlayer();
         if(e.getItem().getItemStack().hasItemMeta())
             if(e.getItem().getItemStack().getItemMeta().hasLore())
-                if(e.getItem().getItemStack().getItemMeta().getLore().get(0) =="threw")
-                    if(e.getItem().getItemStack().getItemMeta().getLore().get(1) ==e.getPlayer().getUniqueId().toString()){
+                if(e.getItem().getItemStack().getItemMeta().getLore().get(0).equals("threw"))
+                    if(e.getItem().getItemStack().getItemMeta().getLore().get(1).equals(e.getPlayer().getUniqueId().toString())){
                         e.setCancelled(true);
                         return;
                     }
