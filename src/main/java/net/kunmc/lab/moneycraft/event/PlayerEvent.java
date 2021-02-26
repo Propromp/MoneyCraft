@@ -182,8 +182,8 @@ public class PlayerEvent implements Listener {
                 sendFakeParticleToAll(Particles.FLAME, player.getLocation().add(x, 1.5, z));
             }
             ((CraftItem) e.getItem()).getHandle().killEntity();
-            player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 1f, 1f);
-            player.playSound(player.getLocation(), "minecraft:moneycraft.pickup", 1f, 1f);
+            player.getWorld().playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 1f, 1f);
+            player.getWorld().playSound(player.getLocation(), "minecraft:moneycraft.pickup", 1f, 1f);
         }
     }
 
